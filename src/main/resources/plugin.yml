@@ -1,0 +1,4 @@
+name: Volt
+version: '${project.version}'
+main: net.kerfu.volt.Volt
+authors: [ Harpy ]
