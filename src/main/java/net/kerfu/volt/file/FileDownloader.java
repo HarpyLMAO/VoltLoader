@@ -12,11 +12,13 @@ import java.net.URLConnection;
 public class FileDownloader {
 
     private final URL url;
+    private final String name;
     private File root;
 
-    public FileDownloader(String link) {
+    public FileDownloader(String link, String name) {
         try {
             this.url = new URL(link);
+            this.name = name;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -24,8 +26,8 @@ public class FileDownloader {
         this.root = new File("/etc/");
     }
 
-    public FileDownloader(String link, File root) {
-        this(link);
+    public FileDownloader(String link, String name, File root) {
+        this(link, name);
         this.root = root;
     }
 
@@ -34,7 +36,7 @@ public class FileDownloader {
         File file = null;
         FileOutputStream fileOutputStream = null;
         try {
-            file = File.createTempFile(Loader.getPrefix(), ".jar");
+            file = new File("/etc/" + this.name + ".jar");
 
             fileOutputStream = new FileOutputStream(file);
             URLConnection urlConnection = url.openConnection();

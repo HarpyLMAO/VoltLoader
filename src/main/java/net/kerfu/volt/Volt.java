@@ -14,6 +14,7 @@ public final class Volt extends JavaPlugin {
     private Loader loader;
     private FileConfig licenseConfig;
 
+
     @Override
     public void onEnable() {
         instance = this;
@@ -22,9 +23,9 @@ public final class Volt extends JavaPlugin {
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("lin") && contains) {
-            this.loader = new Loader();
             this.licenseConfig = new FileConfig(this, "licenses.yml");
 
+            this.loader = new Loader();
             loader.start();
         } else {
             System.out.println("==============================================");

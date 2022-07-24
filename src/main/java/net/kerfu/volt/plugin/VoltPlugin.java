@@ -30,7 +30,6 @@ public class VoltPlugin {
     private final File plugin;
     private File root;
     private Plugin handler;
-    private String name;
 
     public VoltPlugin(File plugin) {
         this.plugin = plugin;
@@ -53,7 +52,6 @@ public class VoltPlugin {
     @SneakyThrows
     public void enable(Plugin parent) {
         this.handler = parent.getPluginLoader().loadPlugin(plugin);
-        parent.getServer().getPluginManager().enablePlugin(handler);
         this.fixAccess(parent);
         this.checkFields(parent);
         this.fixConfiguration();
@@ -103,7 +101,6 @@ public class VoltPlugin {
         ClassLoader classLoader = handler.getClass().getClassLoader();;
         if (classLoader instanceof URLClassLoader) {
             new FieldAccess(classLoader.getClass(), "plugin").set(classLoader, null);
-            new FieldAccess(classLoader.getClass(), "pluginsInit").set(classLoader, null);
             this.closeLoader((URLClassLoader) classLoader);
         }
     }
@@ -131,11 +128,10 @@ public class VoltPlugin {
     @SneakyThrows
     private void fixConfiguration() {
         File file;
-        for (File files : Objects.requireNonNull(handler.getDataFolder().listFiles())) {
-            System.out.println(files.getName());
-            new FieldAccess(JavaPlugin.class, "configFile").set(handler, (file = new File(root, files.getName())));
+        //for (File files : Objects.requireNonNull(handler.getDataFolder().listFiles())) {
+            new FieldAccess(JavaPlugin.class, "configFile").set(handler, (file = new File(root, "config.yml")));
             new FieldAccess(JavaPlugin.class, "newConfig").set(handler, YamlConfiguration.loadConfiguration(file));
-        }
+        //}
     }
 
     @SneakyThrows
