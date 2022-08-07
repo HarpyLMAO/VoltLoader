@@ -24,7 +24,6 @@ public final class Volt extends JavaPlugin {
 
         if (os.contains("lin") && contains) {
             this.licenseConfig = new FileConfig(this, "licenses.yml");
-
             this.loader = new Loader();
             loader.start();
         } else {
