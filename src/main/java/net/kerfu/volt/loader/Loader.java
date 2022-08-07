@@ -60,7 +60,7 @@ public class Loader {
                 String license = configCursor.getString("license");
 
                 if (!license.equalsIgnoreCase("none")) {
-                    if (new SharkLicenses(Volt.getInstance(), license, "http://193.122.150.129:82/api/client", "d4dfb74a90e8f5f65e8e6a6dd7e2c56dbb7f33c0", key).verify()) {
+                    if (new SharkLicenses(Volt.getInstance(), license, "http://license.mangel.lol/api/client", "72d0f6ac94a18f276fcdf6875073bb0d7fbaf05b", key).verify()) {
                         this.loadPlugin(key);
                     }
                 }

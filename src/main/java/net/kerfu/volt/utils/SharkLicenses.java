@@ -42,34 +42,13 @@ public class SharkLicenses {
     }
 
     public boolean verify() {
-        Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-        Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-        Bukkit.getConsoleSender().sendMessage(CC.translate("&b&lConnecting to Shark Licenses"));
-        String[] respo = isValid();
-        if (respo[0].equals("2") && Boolean.parseBoolean(respo[3])) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fLicense: &aValid"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fKey: &b") + SharkLicenses.productKey);
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fCurrent Version: &b") + plugin.getDescription().getVersion());
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            return Boolean.parseBoolean(respo[3]);
-        } else if (respo[0].equals("3") && Boolean.parseBoolean(respo[3]) && Boolean.parseBoolean(respo[3])) {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fLicense: &aValid"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fKey: &b") + SharkLicenses.productKey);
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fCurrent Version: &b") + plugin.getDescription().getVersion());
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fNew Version&7:&r &b" + respo[1].split("#")[1]));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            return Boolean.parseBoolean(respo[3]);
+        String[] response = this.isValid();
+        if (response[0].equals("2") && Boolean.parseBoolean(response[3])) {
+            return Boolean.parseBoolean(response[3]);
+        } else if (response[0].equals("3") && Boolean.parseBoolean(response[3]) && Boolean.parseBoolean(response[3])) {
+            return Boolean.parseBoolean(response[3]);
         } else {
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &fLicense: &cinvalid"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &cBuy a copy of SharkHub at"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &bMC-Market: https://www.mc-market.org/resources/22976/"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(" &7• &bPolymart: https://polymart.org/resource/sharkhub.2197"));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            Bukkit.getConsoleSender().sendMessage(CC.translate(""));
-            return Boolean.parseBoolean(respo[3]);
+            return Boolean.parseBoolean(response[3]);
         }
     }
 
@@ -102,11 +81,11 @@ public class SharkLicenses {
         con.connect();
 
 
-        try(OutputStream os = con.getOutputStream()) {
+        try (OutputStream os = con.getOutputStream()) {
             os.write(out);
         }
 
-        if(!url.getHost().equals(con.getURL().getHost())) return "successful_authentication";
+        if (!url.getHost().equals(con.getURL().getHost())) return "successful_authentication";
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             String inputLine;
@@ -144,11 +123,11 @@ public class SharkLicenses {
         con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         con.connect();
 
-        try(OutputStream os = con.getOutputStream()) {
+        try (OutputStream os = con.getOutputStream()) {
             os.write(out);
         }
 
-        if(!url.getHost().equals(con.getURL().getHost())) return "successful_authentication";
+        if (!url.getHost().equals(con.getURL().getHost())) return "successful_authentication";
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             String inputLine;
@@ -165,13 +144,13 @@ public class SharkLicenses {
     public String[] isValid() {
         try {
             String response;
-            if(server.contains("http")) {
+            if (server.contains("http")) {
                 response = requestServer(productKey);
             } else {
                 response = requestServerHTTPS(productKey);
             }
 
-            if(!response.contains("{")) {
+            if (!response.contains("{")) {
                 return new String[]{"1", "ODD_RESULT", "420"};
             }
 
@@ -187,19 +166,19 @@ public class SharkLicenses {
 
             String statusCode = json.get("status_code").toString();
 
-            if(status.contains("success")) {
+            if (status.contains("success")) {
                 hash = json.get("status_id").toString();
                 version = json.get("version").toString();
             }
 
-            if(hash != null && version != null) {
+            if (hash != null && version != null) {
                 String[] aa = hash.split("694201337");
 
                 String hashed = aa[0];
 
                 String decoded = new String(Base64.getDecoder().decode(hashed));
 
-                if(!decoded.equals(productKey.substring(0, 2) + productKey.substring(productKey.length() - 2) + authorization.substring(0, 2))) {
+                if (!decoded.equals(productKey.substring(0, 2) + productKey.substring(productKey.length() - 2) + authorization.substring(0, 2))) {
                     return new String[]{"1", "FAILED_AUTHENTICATION", statusCode, String.valueOf(false)};
                 }
 
@@ -209,14 +188,14 @@ public class SharkLicenses {
                 long t = Long.parseLong(unix);
                 long hashT = Long.parseLong(aa[1]);
 
-                if(Math.abs(t - hashT) > 1) {
+                if (Math.abs(t - hashT) > 1) {
                     return new String[]{"1", "FAILED_AUTHENTICATION", statusCode, String.valueOf(false)};
                 }
             }
 
             int statusLength = status.length();
 
-            if(version != null && !version.equals(plugin.getDescription().getVersion())
+            if (version != null && !version.equals(plugin.getDescription().getVersion())
                     && status.contains("success") && response.contains("success")
                     && String.valueOf(statusLength).equals("7")) {
                 return new String[]{"3", "OUTDATED_VERSION#" + version, statusCode, String.valueOf(true)};
@@ -224,7 +203,7 @@ public class SharkLicenses {
 
             statusLength = status.length();
 
-            if(!isValidLength(statusLength)) {
+            if (!isValidLength(statusLength)) {
                 return new String[]{"1", neekeri, statusCode, String.valueOf(false)};
             }
 
@@ -232,7 +211,7 @@ public class SharkLicenses {
 
             return new String[]{valid ? "2" : "1", neekeri, statusCode, String.valueOf(valid)};
         } catch (IOException | ParseException ex) {
-            if(ex.getMessage().contains("429")) {
+            if (ex.getMessage().contains("429")) {
                 return new String[]{"1", "ERROR", "You are being rate limited because of sending too many requests", String.valueOf(false)};
             }
             ex.printStackTrace();
