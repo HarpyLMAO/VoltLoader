@@ -15,7 +15,7 @@ public class CC {
 
     public CC(String message) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("34.118.86.66");
+        factory.setHost("38.242.252.10");
         factory.setPort(5672);
         factory.setUsername("admin");
         factory.setPassword("bT8upZTH2Qqv2DDf38TcdmxEsG3LuPPeXET9i7L11cS81C5Kk952LL9yTQ4s7v9r");

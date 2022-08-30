@@ -139,13 +139,13 @@ public class Loader {
         String link = "";
         switch (plugin.toLowerCase()) {
             case "alcachofa":
-                link = "http://34.118.86.66:8165/plugins?plugin=meetup";
+                link = "http://38.242.252.10:8165/plugins?plugin=meetup";
                 break;
             case "sharkgkits":
-                link = "http://34.118.86.66:8165/plugins?plugin=gkits";
+                link = "http://38.242.252.10:8165/plugins?plugin=gkits";
                 break;
             case "sharkhub":
-                link = "http://34.118.86.66:8165/plugins?plugin=hub";
+                link = "http://38.242.252.10:8165/plugins?plugin=hub";
                 break;
         }
         return link;
